@@ -1,25 +1,18 @@
-import sys, getopt
-from selectFunctions import selectByName, selectByCode, filterByName, selectJourneys
+import argparse
+from selectFunctions import *
 
-argv = sys.argv[1:]
+parser = argparse.ArgumentParser(prog = 'shipviewer', description="Hello World")
+parser.add_argument('action', action="store")
+parser.add_argument('-n', action="store")
+parser.add_argument('-c', action="store")
+print(vars(parser.parse_args()))
+args = vars(parser.parse_args())
 
-inputfile=''
-outputfile=''
-try:
-    opts, args = getopt.getopt(argv, "c:n:f:j:", ["cfile=", "nfile=", "ffile=", "jfile="])
-except getopt.GetoptError:
-    print('test.py -i <inputfile> -o <outputfile>')
-    sys.exit(1)
+if args['action'] == "show" and args['n'] is not None:
+    selectByName(args['n'])
 
-for opt, arg in opts:
-    if opt in ("-n"):
-        print arg
-        selectByName(arg)
-    elif opt in ("-c", "--code"):
-        selectByCode(arg)
+if args['action'] == "show" and args['c'] is not None:
+    selectByCode(args['c'])
 
-    elif opt in ("-f", "--filter"):
-        filterByName(arg)
-
-    elif opt in ("-j", "--journey"):
-        selectJourneys(arg)
+if args['action'] == "search" and args['n'] is not None:
+    filterByName(args['n'])
