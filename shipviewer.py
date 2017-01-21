@@ -6,11 +6,15 @@ parser.add_argument('action', action="store")
 parser.add_argument('-n', action="store")
 parser.add_argument('-c', action="store")
 parser.add_argument('-l', action="store")
+parser.add_argument('-f', action="store")
 
 args = vars(parser.parse_args())
 
 if args['action'] == "show" and args['n'] is not None:
-    selectByName(args['n'])
+    if args['f'] is None:
+        selectByName(args['n'])
+    elif args['f'] == 'json':
+        selectByNameJSON(args['n'])
 
 elif args['action'] == "show" and args['c'] is not None:
     selectByCode(str(args['c']))

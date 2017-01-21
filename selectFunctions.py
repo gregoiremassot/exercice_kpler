@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from sqlalchemy import select, Table, create_engine, MetaData
 
 def selectByName(name_ship):
@@ -17,6 +18,27 @@ def selectByName(name_ship):
                                                             results[0][7],
                                                             results[0][8]
                                                             )
+    except:
+        print("Mauvais nom")
+        exit(1)
+
+def selectByNameJSON(name_ship):
+    engine = create_engine('sqlite:///mon_sgbd.db')
+    connection = engine.connect()
+    metadata = MetaData(engine)
+    navires = Table('navires', metadata, autoload=True, autoload_with=engine)
+    s = select([navires]).where(navires.c.name == str(name_ship))
+    rp = connection.execute(s)
+    try:
+        results = rp.fetchall()
+        print ("{\n" + ' "Name" : "{}" \n "IMO" : "{}" \n "Country" : "{}" \n "Size" : "{}" x "{}" \n "GT" : "{}"\n "Type" : "{}" \n "Subtype" : "{}"\n'.format(results[0][1],
+                                                           int(results[0][2]),
+                                                           results[0][3],
+                                                           results[0][4],results[0][5],
+                                                           results[0][6],
+                                                            results[0][7],
+                                                            results[0][8]
+                                                            )  + "}")
     except:
         print("Mauvais nom")
         exit(1)
