@@ -64,3 +64,14 @@ def selectJourneys(name_ship):
     results=rp.fetchall()
     print "{}\n{} --> {}".format(results[0][1], results[0][2], results[0][3])
 
+def arriving(name_city):
+    engine = create_engine('sqlite:///mon_sgbd.db')
+    metadata = MetaData(engine)
+    connection = engine.connect()
+    trajets = Table('trajets', metadata, autoload=True, autoload_with=engine)
+    s = select([trajets]).where(trajets.c.destination_harbor == name_city)
+    rp = connection.execute(s)
+    results = rp.fetchall()
+    for i in range(len(results)):
+        print results[i][1]
+
